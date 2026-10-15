@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4a079d34d1143904496d284e6619e791, type: 3}
-  m_Name: Plate
+  m_Name: IronTube
   m_EditorClassIdentifier: Assembly-CSharp::ResourceConfig
-  id: plate
-  displayName: "\u041F\u043B\u0430\u0441\u0442\u0438\u043D\u0430"
+  id: irontube
+  displayName: "\u0416\u0435\u043B\u0435\u0437\u043D\u044B\u0439 \u0441\u0442\u0435\u0440\u0436\u0435\u043D\u044C"
   icon: {fileID: 0}
-  baseSellPrice: 14
+  baseSellPrice: 7
   type: 1

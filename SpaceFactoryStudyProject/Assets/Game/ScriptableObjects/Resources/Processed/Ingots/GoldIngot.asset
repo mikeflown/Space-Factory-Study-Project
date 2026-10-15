@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4a079d34d1143904496d284e6619e791, type: 3}
-  m_Name: Microchip
+  m_Name: GoldIngot
   m_EditorClassIdentifier: Assembly-CSharp::ResourceConfig
-  id: microchip
-  displayName: "\u041F\u043B\u0430\u0442\u0430"
+  id: goldIngot
+  displayName: "\u0417\u043E\u043B\u043E\u0442\u043E\u0439 \u0441\u043B\u0438\u0442\u043E\u043A"
   icon: {fileID: 0}
-  baseSellPrice: 32
-  type: 2
+  baseSellPrice: 7
+  type: 1
