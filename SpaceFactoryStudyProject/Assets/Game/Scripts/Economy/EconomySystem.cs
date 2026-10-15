@@ -8,10 +8,9 @@ public class EconomySystem
     private readonly EconomyConfig _config;
     private float _salesAccumulator;
     private float _salesWindowTimer;
-    private const float SalesWindowSeconds = 10f;
+    private const float SalesWindowSeconds = 4f;
     public float Currency => _currency;
     public float IncomePerMinute => _incomePerMinute;
-    private float _incomeAccumulator;
     public event Action<float> OnCurrencyChanged;
     public event Action<float> OnIncomePerMinuteChanged;
     public EconomySystem(EconomyConfig config)
@@ -29,6 +28,7 @@ public class EconomySystem
     {
         if (amount == 0f) return;
         _currency += amount;
+        _currency = Mathf.Floor(_currency);
         OnCurrencyChanged?.Invoke(_currency);
     }
     public bool TrySpend(float amount)
@@ -47,23 +47,13 @@ public class EconomySystem
     }
     public void Tick(float deltaTime)
     {
-        if (_incomePerMinute > 0f)
-        {
-            _incomeAccumulator += (_incomePerMinute / 60f) * deltaTime;
-            if (_incomeAccumulator >= 0.01f)
-            {
-                float toAdd = Mathf.Floor(_incomeAccumulator * 100f) / 100f;
-                _incomeAccumulator -= toAdd;
-                AddCurrency(toAdd);
-            }
-        }
         _salesWindowTimer += deltaTime;
         if (_salesWindowTimer >= SalesWindowSeconds)
         {
             float incomeInWindow = _salesAccumulator;
             float newIncomePerMinute = (incomeInWindow / SalesWindowSeconds) * 60f;
             float smoothSpeed = _config != null ? _config.incomeSmoothSpeed : 1f;
-            _incomePerMinute = Mathf.Lerp(_incomePerMinute, newIncomePerMinute, smoothSpeed * SalesWindowSeconds);
+            _incomePerMinute = Mathf.Lerp(_incomePerMinute, newIncomePerMinute, Mathf.Clamp01(smoothSpeed * SalesWindowSeconds));
             _salesAccumulator = 0f;
             _salesWindowTimer = 0f;
             OnIncomePerMinuteChanged?.Invoke(_incomePerMinute);

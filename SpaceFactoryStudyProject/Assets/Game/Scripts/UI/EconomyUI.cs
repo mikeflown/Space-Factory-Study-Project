@@ -17,12 +17,12 @@ public class EconomyUI : MonoBehaviour
     private void UpdateCurrency(float value)
     {
         if (currencyText != null)
-            currencyText.text = $"Валюта: {value:F1}";
+            currencyText.text = $"Валюта: {Mathf.FloorToInt(value)}";
     }
     private void UpdateIncome(float value)
     {
         if (incomeText != null)
-            incomeText.text = $"Доход: {value:F1} / мин";
+            incomeText.text = $"Доход: {Mathf.FloorToInt(value)} / мин";
     }
     private void OnDestroy()
     {
