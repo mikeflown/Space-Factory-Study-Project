@@ -83,11 +83,23 @@ public class GridSystem
         _items[pos] = item;
         return true;
     }
+    public bool TryMoveItem(Vector2Int from, Vector2Int to)
+    {
+        if (!IsInside(from) || !IsInside(to))
+            return false;
+        if (!_items.TryGetValue(from, out var item))
+            return false;
+        if (_items.ContainsKey(to))
+            return false;
+        _items.Remove(from);
+        item.GridPosition = to;
+        _items[to] = item;
+        return true;
+    }
     public Item RemoveItem(Vector2Int pos)
     {
         if (!_items.TryGetValue(pos, out var item))
             return null;
-
         _items.Remove(pos);
         return item;
     }

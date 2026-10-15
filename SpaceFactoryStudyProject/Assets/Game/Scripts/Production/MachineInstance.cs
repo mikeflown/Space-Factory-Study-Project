@@ -14,6 +14,7 @@ public class MachineInstance
         Behaviour = config.type switch
         {
             MachineType.Dispenser => new DispenserBehaviour(),
+            MachineType.Conveyor  => new ConveyorBehaviour(),
             MachineType.Seller    => new SellerBehaviour(),
             _                     => new EmptyBehaviour()
         };

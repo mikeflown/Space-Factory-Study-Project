@@ -15,9 +15,7 @@ public class SellerBehaviour : IMachineBehaviour
         if (_timer < _interval) return;
         _timer = 0f;
         Vector2Int pos = _owner.GridPosition;
-        bool hasItem = context.Grid.HasItem(pos);
-        Debug.Log($"[Seller] Проверяю клетку {pos}. Есть предмет: {hasItem}");
-        if (!hasItem)
+        if (!context.Grid.HasItem(pos))
             return;
         var item = context.Grid.RemoveItem(pos);
         if (item == null)
@@ -26,7 +24,7 @@ public class SellerBehaviour : IMachineBehaviour
             return;
         }
         float price = item.Resource.baseSellPrice;
-        context.Economy.AddCurrency(price);
+        context.Economy.RecordSale(price);
         context.Events.RaiseResourceSold(item.Resource, price);
         context.OnItemSold?.Invoke(pos);
         Debug.Log($"[Seller] Продал {item.Resource.displayName} за {price}");

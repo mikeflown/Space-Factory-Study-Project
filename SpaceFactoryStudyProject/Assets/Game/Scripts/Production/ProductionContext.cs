@@ -8,4 +8,5 @@ public class ProductionContext
     public GameEvents Events;
     public Action<MachineInstance, ResourceConfig> OnItemProduced;
     public Action<Vector2Int> OnItemSold;
+    public Action<Vector2Int, Vector2Int, Item> OnItemMoved;
 }

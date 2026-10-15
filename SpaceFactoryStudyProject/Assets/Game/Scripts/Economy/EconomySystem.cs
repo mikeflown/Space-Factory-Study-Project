@@ -6,6 +6,9 @@ public class EconomySystem
     private float _currency;
     private float _incomePerMinute;
     private readonly EconomyConfig _config;
+    private float _salesAccumulator;
+    private float _salesWindowTimer;
+    private const float SalesWindowSeconds = 10f;
     public float Currency => _currency;
     public float IncomePerMinute => _incomePerMinute;
     private float _incomeAccumulator;
@@ -36,15 +39,34 @@ public class EconomySystem
         OnCurrencyChanged?.Invoke(_currency);
         return true;
     }
+    public void RecordSale(float amount)
+    {
+        if (amount <= 0f) return;
+        AddCurrency(amount);
+        _salesAccumulator += amount;
+    }
     public void Tick(float deltaTime)
     {
-        if (_incomePerMinute <= 0f) return;
-        _incomeAccumulator += (_incomePerMinute / 60f) * deltaTime;
-        if (_incomeAccumulator >= 0.01f)
+        if (_incomePerMinute > 0f)
         {
-            float toAdd = Mathf.Floor(_incomeAccumulator * 100f) / 100f; // до сотых
-            _incomeAccumulator -= toAdd;
-            AddCurrency(toAdd);
+            _incomeAccumulator += (_incomePerMinute / 60f) * deltaTime;
+            if (_incomeAccumulator >= 0.01f)
+            {
+                float toAdd = Mathf.Floor(_incomeAccumulator * 100f) / 100f;
+                _incomeAccumulator -= toAdd;
+                AddCurrency(toAdd);
+            }
+        }
+        _salesWindowTimer += deltaTime;
+        if (_salesWindowTimer >= SalesWindowSeconds)
+        {
+            float incomeInWindow = _salesAccumulator;
+            float newIncomePerMinute = (incomeInWindow / SalesWindowSeconds) * 60f;
+            float smoothSpeed = _config != null ? _config.incomeSmoothSpeed : 1f;
+            _incomePerMinute = Mathf.Lerp(_incomePerMinute, newIncomePerMinute, smoothSpeed * SalesWindowSeconds);
+            _salesAccumulator = 0f;
+            _salesWindowTimer = 0f;
+            OnIncomePerMinuteChanged?.Invoke(_incomePerMinute);
         }
     }
     public void SetIncomePerMinute(float value)

@@ -11,6 +11,8 @@ public class MachineConfig : ScriptableObject
     public float costMultiplier = 1.5f;
     public int unlockAtCurrency = 0;
     public Vector2Int size = Vector2Int.one;
+    [Header("Conveyor Settings")]
+    public ConveyorDirection direction = ConveyorDirection.Right;
 }
 public enum MachineType
 {
@@ -21,4 +23,11 @@ public enum MachineType
     Press,
     Assembler,
     Seller
+}
+public enum ConveyorDirection
+{
+    Right,
+    Left,
+    Up,
+    Down
 }
