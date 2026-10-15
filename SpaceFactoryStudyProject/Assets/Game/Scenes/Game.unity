@@ -669,7 +669,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 40, y: -40}
+  m_AnchoredPosition: {x: 2, y: -40}
   m_SizeDelta: {x: 500, y: 60}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &635081365
@@ -893,7 +893,7 @@ Canvas:
   serializedVersion: 3
   m_RenderMode: 1
   m_Camera: {fileID: 2087489923}
-  m_PlaneDistance: 100
+  m_PlaneDistance: 10
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
@@ -1568,6 +1568,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: bba04788892c6fe45811238a07977396, type: 2}
   - {fileID: 11400000, guid: e3569b09326fc994187a03ae330d1cd0, type: 2}
   - {fileID: 11400000, guid: cb07a211c9a71fa4e9ad7bba3c133a9c, type: 2}
+  ironResource: {fileID: 11400000, guid: 111b93f558f452346a6812fa7e3e6f35, type: 2}
   economyUI: {fileID: 758307963}
   buildMenuUI: {fileID: 1602618256}
   manualClickerPrefab: {fileID: 5884557238672918825, guid: 9e1e61f62909d1241ae26e8c0cf2024f, type: 3}
@@ -1608,7 +1609,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 40, y: -110}
+  m_AnchoredPosition: {x: 2, y: -110}
   m_SizeDelta: {x: 500, y: 50}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &2074253136

@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ResourceConfig
   id: ironplate
   displayName: "\u0416\u0435\u043B\u0435\u0437\u043D\u0430\u044F \u043F\u043B\u0430\u0441\u0442\u0438\u043D\u0430"
-  icon: {fileID: 0}
+  icon: {fileID: -1456430994347587974, guid: 86fdef6d17c0bd447af4d7355da02af6, type: 3}
   baseSellPrice: 9
   type: 1

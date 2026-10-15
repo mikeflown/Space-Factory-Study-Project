@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ResourceConfig
   id: coppertube
   displayName: "\u041C\u0435\u0434\u043D\u044B\u0439 \u0441\u0442\u0435\u0440\u0436\u0435\u043D\u044C"
-  icon: {fileID: 0}
+  icon: {fileID: 4503607874160119537, guid: 12fa98cb6583adf4e8d7964d5662276d, type: 3}
   baseSellPrice: 5
   type: 1

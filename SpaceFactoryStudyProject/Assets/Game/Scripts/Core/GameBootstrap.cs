@@ -8,13 +8,15 @@ public class GameBootstrap : MonoBehaviour
     [SerializeField] private EconomyConfig economyConfig;
     [Header("Machine Configs")]
     [SerializeField] private MachineConfig[] allMachineConfigs;
+    [Header("Resources")]
+    [SerializeField] private ResourceConfig ironResource;
     [Header("UI")]
     [SerializeField] private EconomyUI economyUI;
     [SerializeField] private BuildMenuUI buildMenuUI;
     [Header("Clicker")]
     [SerializeField] private ManualClicker manualClickerPrefab;
     [Header("Grid")]
-    [SerializeField] private int gridWidth = 12;
+    [SerializeField] private int gridWidth = 14;
     [SerializeField] private int gridHeight = 8;
     [Header("Grid View")]
     [SerializeField] private GridView gridView;
@@ -23,6 +25,7 @@ public class GameBootstrap : MonoBehaviour
     private EconomySystem _economy;
     private GameEvents _events;
     private GridSystem _grid;
+    private ProductionSystem _production;
     private void Awake()
     {
         _saveSystem = new SaveSystem();
@@ -49,6 +52,7 @@ public class GameBootstrap : MonoBehaviour
         }
         _grid = new GridSystem(gridWidth, gridHeight);
         Debug.Log($"[Bootstrap] Сетка создана: {_grid.Width}x{_grid.Height}");
+        _production = new ProductionSystem(_grid, _economy, _events);
         if (gridView != null)
             gridView.Initialize(_grid, _events, _economy);
         if (buildMenuUI != null && gridView != null)
@@ -62,14 +66,38 @@ public class GameBootstrap : MonoBehaviour
             ManualClicker clicker = Instantiate(manualClickerPrefab);
             clicker.Initialize(_economy);
         }
+        _events.OnMachinePlaced += OnMachinePlaced;
+        _events.OnMachineRemoved += OnMachineRemoved;
     }
     private void Update()
     {
         _economy.Tick(Time.deltaTime);
+        _production?.Tick(Time.deltaTime);
+    }
+    private void OnMachinePlaced(Vector2Int pos, MachineInstance machine)
+    {
+        if (machine.Config.type == MachineType.Dispenser && machine.Behaviour is DispenserBehaviour dispenser)
+        {
+            dispenser.Setup(ironResource, 2f, 1f);
+        }
+        _production.Register(machine);
+        Debug.Log($"[Bootstrap] Машина зарегистрирована в производстве: {machine.Config.displayName}");
+    }
+    private void OnMachineRemoved(Vector2Int pos)
+    {
+
     }
     private void OnApplicationQuit()
     {
         SaveGame();
+    }
+    private void OnDestroy()
+    {
+        if (_events != null)
+        {
+            _events.OnMachinePlaced -= OnMachinePlaced;
+            _events.OnMachineRemoved -= OnMachineRemoved;
+        }
     }
     private void SaveGame()
     {
@@ -103,6 +131,7 @@ public class GameBootstrap : MonoBehaviour
         foreach (var cellSave in savedCells)
         {
             MachineConfig config = null;
+
             foreach (var cfg in allMachineConfigs)
             {
                 if (cfg != null && cfg.id == cellSave.machineId)
@@ -124,6 +153,11 @@ public class GameBootstrap : MonoBehaviour
                 Debug.LogWarning($"[Bootstrap] Не удалось восстановить машину в {pos}");
                 continue;
             }
+            if (config.type == MachineType.Dispenser && machineInstance.Behaviour is DispenserBehaviour dispenser)
+            {
+                dispenser.Setup(ironResource, 2f, 1f);
+            }
+            _production.Register(machineInstance);
             gridView.SpawnMachineVisual(machineInstance, pos);
         }
         Debug.Log($"[Bootstrap] Восстановлено машин: {savedCells.Count}");

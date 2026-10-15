@@ -4,6 +4,7 @@ using UnityEngine;
 public class GridSystem
 {
     private readonly GridCell[,] _cells;
+    private readonly Dictionary<Vector2Int, Item> _items = new();
     public int Width { get; }
     public int Height { get; }
     public GridSystem(int width, int height)
@@ -63,5 +64,35 @@ public class GridSystem
                     yield return machine;
             }
         }
+    }
+    public bool HasItem(Vector2Int pos)
+    {
+        return _items.ContainsKey(pos);
+    }
+    public Item GetItem(Vector2Int pos)
+    {
+        _items.TryGetValue(pos, out var item);
+        return item;
+    }
+    public bool TryPlaceItem(Vector2Int pos, Item item)
+    {
+        if (!IsInside(pos)) return false;
+        if (_items.ContainsKey(pos)) return false;
+
+        item.GridPosition = pos;
+        _items[pos] = item;
+        return true;
+    }
+    public Item RemoveItem(Vector2Int pos)
+    {
+        if (!_items.TryGetValue(pos, out var item))
+            return null;
+
+        _items.Remove(pos);
+        return item;
+    }
+    public IEnumerable<Item> GetAllItems()
+    {
+        return _items.Values;
     }
 }

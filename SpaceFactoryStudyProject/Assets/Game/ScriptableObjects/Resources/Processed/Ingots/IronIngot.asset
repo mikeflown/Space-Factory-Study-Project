@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ResourceConfig
   id: ironIngot
   displayName: "\u0416\u0435\u043B\u0435\u0437\u043D\u044B\u0439 \u0441\u043B\u0438\u0442\u043E\u043A"
-  icon: {fileID: 0}
+  icon: {fileID: -4773232605451315250, guid: 45e3a69a83695e24190cda7ec0102fc5, type: 3}
   baseSellPrice: 5
   type: 1

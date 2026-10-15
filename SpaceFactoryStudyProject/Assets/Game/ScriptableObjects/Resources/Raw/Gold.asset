@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ResourceConfig
   id: gold
   displayName: "\u0417\u043E\u043B\u043E\u0442\u043E"
-  icon: {fileID: 0}
+  icon: {fileID: -2868050816844536123, guid: 254962326c543b748b50552f2c284b6b, type: 3}
   baseSellPrice: 5
   type: 0

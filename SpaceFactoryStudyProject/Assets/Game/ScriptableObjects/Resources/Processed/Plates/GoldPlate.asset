@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ResourceConfig
   id: goldplate
   displayName: "\u0417\u043E\u043B\u043E\u0442\u0430\u044F \u043F\u043B\u0430\u0441\u0442\u0438\u043D\u0430"
-  icon: {fileID: 0}
+  icon: {fileID: -867519796757545124, guid: 3e5d7338b207327478804a71d8da48e2, type: 3}
   baseSellPrice: 11
   type: 1
