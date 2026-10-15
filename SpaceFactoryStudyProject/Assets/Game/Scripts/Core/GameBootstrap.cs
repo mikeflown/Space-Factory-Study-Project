@@ -5,9 +5,10 @@ public class GameBootstrap : MonoBehaviour
 {
     [Header("Configs")]
     [SerializeField] private EconomyConfig economyConfig;
-    [SerializeField] private UpgradeConfig[] upgradeConfigs;
     [Header("UI")]
     [SerializeField] private EconomyUI economyUI;
+    [Header("Clicker")]
+    [SerializeField] private ManualClicker manualClickerPrefab;
     private SaveSystem _saveSystem;
     private SaveData _currentSave;
     private EconomySystem _economy;
@@ -36,6 +37,11 @@ public class GameBootstrap : MonoBehaviour
         }
         if (economyUI != null)
             economyUI.Initialize(_economy);
+        if (manualClickerPrefab != null)
+        {
+            ManualClicker clicker = Instantiate(manualClickerPrefab);
+            clicker.Initialize(_economy);
+        }
     }
     private void Update()
     {
@@ -60,10 +66,5 @@ public class GameBootstrap : MonoBehaviour
     private void AddTestCurrency()
     {
         _economy?.AddCurrency(100f);
-    }
-    [ContextMenu("Set Income 60/min")]
-    private void SetTestIncome()
-    {
-        _economy?.SetIncomePerMinute(60f);
     }
 }

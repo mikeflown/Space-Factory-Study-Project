@@ -499,11 +499,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameBootstrap
   economyConfig: {fileID: 11400000, guid: 040c96cfa53f02d42ace5f3f39e5777b, type: 2}
-  upgradeConfigs:
-  - {fileID: 11400000, guid: 4b751754d57054d41813a19ded733870, type: 2}
-  - {fileID: 11400000, guid: 5a386ee057957b74a8df2f33565f37af, type: 2}
-  - {fileID: 11400000, guid: b019ea0699e323e4ca4aa9050da98b54, type: 2}
   economyUI: {fileID: 758307963}
+  manualClickerPrefab: {fileID: 4273893915007998387, guid: a13ec8a1c3621ee489ab1c25e1201145, type: 3}
 --- !u!1 &2074253134
 GameObject:
   m_ObjectHideFlags: 0
