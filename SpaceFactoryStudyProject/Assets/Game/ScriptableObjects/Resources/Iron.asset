@@ -15,5 +15,5 @@ MonoBehaviour:
   id: iron
   displayName: "\u0416\u0435\u043B\u0435\u0437\u043E"
   icon: {fileID: 0}
-  baseSellPrice: 6
+  baseSellPrice: 2
   type: 0

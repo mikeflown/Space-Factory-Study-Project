@@ -15,5 +15,5 @@ MonoBehaviour:
   id: copper
   displayName: "\u041C\u0435\u0434\u044C"
   icon: {fileID: 0}
-  baseSellPrice: 3
+  baseSellPrice: 1
   type: 0

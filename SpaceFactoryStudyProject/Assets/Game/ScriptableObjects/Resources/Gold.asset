@@ -15,5 +15,5 @@ MonoBehaviour:
   id: gold
   displayName: "\u0417\u043E\u043B\u043E\u0442\u043E"
   icon: {fileID: 0}
-  baseSellPrice: 9
+  baseSellPrice: 5
   type: 0
