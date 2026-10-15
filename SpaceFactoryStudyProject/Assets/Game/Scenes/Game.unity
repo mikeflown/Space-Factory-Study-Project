@@ -343,7 +343,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 354394645210679368, guid: 433fef3657f587345bf8dd56da398db8, type: 3}
+  m_Sprite: {fileID: -1655557243948851228, guid: 3f96c50bc500022439e90e0cdec295f7, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -802,11 +802,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GridView
   cellSize: 1
-  gridColor: {r: 0.1792453, g: 0.1792453, b: 0.1792453, a: 0.62352943}
-  hoverColor: {r: 0.5, g: 0.5, b: 0.5, a: 0.6313726}
+  gridColor: {r: 1, g: 1, b: 1, a: 1}
+  hoverColor: {r: 0.4245283, g: 0.4245283, b: 0.4245283, a: 0.3882353}
   cellsParent: {fileID: 687667031}
   cellPrefab: {fileID: 1351179213411768673, guid: bcc975e2b159a4f49a8f5417ee6b6fcf, type: 3}
   machinePrefab: {fileID: 3014884714812993444, guid: f769cd45b0c10a9479eec88e0432bfb4, type: 3}
+  itemPrefab: {fileID: 2856454212817314267, guid: 8de9e9a45b375c34eac9e2ab377c175d, type: 3}
 --- !u!4 &687667031
 Transform:
   m_ObjectHideFlags: 0

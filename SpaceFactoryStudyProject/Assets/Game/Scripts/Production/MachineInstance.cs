@@ -11,10 +11,12 @@ public class MachineInstance
     public MachineInstance(MachineConfig config)
     {
         Config = config;
-        if (config.type == MachineType.Dispenser)
-            Behaviour = new DispenserBehaviour();
-        else
-            Behaviour = new EmptyBehaviour();
+        Behaviour = config.type switch
+        {
+            MachineType.Dispenser => new DispenserBehaviour(),
+            MachineType.Seller    => new SellerBehaviour(),
+            _                     => new EmptyBehaviour()
+        };
         Behaviour.Bind(this);
     }
 }

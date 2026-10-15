@@ -16,7 +16,7 @@ public class GameBootstrap : MonoBehaviour
     [Header("Clicker")]
     [SerializeField] private ManualClicker manualClickerPrefab;
     [Header("Grid")]
-    [SerializeField] private int gridWidth = 14;
+    [SerializeField] private int gridWidth = 12;
     [SerializeField] private int gridHeight = 8;
     [Header("Grid View")]
     [SerializeField] private GridView gridView;
@@ -53,6 +53,7 @@ public class GameBootstrap : MonoBehaviour
         _grid = new GridSystem(gridWidth, gridHeight);
         Debug.Log($"[Bootstrap] Сетка создана: {_grid.Width}x{_grid.Height}");
         _production = new ProductionSystem(_grid, _economy, _events);
+        _production.GridView = gridView;
         if (gridView != null)
             gridView.Initialize(_grid, _events, _economy);
         if (buildMenuUI != null && gridView != null)
@@ -81,11 +82,12 @@ public class GameBootstrap : MonoBehaviour
             dispenser.Setup(ironResource, 2f, 1f);
         }
         _production.Register(machine);
-        Debug.Log($"[Bootstrap] Машина зарегистрирована в производстве: {machine.Config.displayName}");
+        Debug.Log($"[Bootstrap] Машина зарегистрирована: {machine.Config.displayName}");
     }
-    private void OnMachineRemoved(Vector2Int pos)
+    private void OnMachineRemoved(Vector2Int pos, MachineInstance machine)
     {
-
+        _production.Unregister(machine);
+        Debug.Log($"[Bootstrap] Машина разрегистрирована: {machine.Config.displayName}");
     }
     private void OnApplicationQuit()
     {
@@ -131,7 +133,6 @@ public class GameBootstrap : MonoBehaviour
         foreach (var cellSave in savedCells)
         {
             MachineConfig config = null;
-
             foreach (var cfg in allMachineConfigs)
             {
                 if (cfg != null && cfg.id == cellSave.machineId)

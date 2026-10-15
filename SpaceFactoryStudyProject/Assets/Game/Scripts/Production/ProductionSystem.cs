@@ -7,6 +7,7 @@ public class ProductionSystem
     private readonly EconomySystem _economy;
     private readonly GameEvents _events;
     private readonly List<MachineInstance> _machines = new();
+    public GridView GridView;
     public ProductionSystem(GridSystem grid, EconomySystem economy, GameEvents events)
     {
         _grid = grid;
@@ -29,7 +30,8 @@ public class ProductionSystem
             Economy = _economy,
             Grid = _grid,
             Events = _events,
-            OnItemProduced = HandleItemProduced
+            OnItemProduced = HandleItemProduced,
+            OnItemSold = HandleItemSold
         };
         foreach (var machine in _machines)
         {
@@ -40,14 +42,16 @@ public class ProductionSystem
     {
         Vector2Int pos = machine.GridPosition;
         if (_grid.HasItem(pos))
-        {
-            Debug.Log("[Production] Клетка занята предметом, ресурс не создан");
             return;
-        }
         var item = new Item(resource, pos);
         if (_grid.TryPlaceItem(pos, item))
         {
             Debug.Log($"[Production] Создан предмет {resource.displayName} в {pos}");
+            GridView?.SpawnItemVisual(item);
         }
+    }
+    private void HandleItemSold(Vector2Int pos)
+    {
+        GridView?.RemoveItemVisual(pos);
     }
 }

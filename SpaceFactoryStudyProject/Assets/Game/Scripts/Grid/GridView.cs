@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -12,6 +13,8 @@ public class GridView : MonoBehaviour
     [SerializeField] private GameObject cellPrefab;
     [Header("Building")]
     [SerializeField] private GameObject machinePrefab;
+    [Header("Items")]
+    [SerializeField] private GameObject itemPrefab;
     private MachineConfig _selectedMachineConfig;
     private GridSystem _grid;
     private GameEvents _events;
@@ -20,6 +23,8 @@ public class GridView : MonoBehaviour
     private GameObject[,] _visualCells;
     private Vector2Int? _hoveredCell;
     private Transform _machinesParent;
+    private Transform _itemsParent;
+    private readonly Dictionary<Vector2Int, GameObject> _itemVisuals = new();
     public void Initialize(GridSystem grid, GameEvents events, EconomySystem economy)
     {
         _grid = grid;
@@ -30,6 +35,9 @@ public class GridView : MonoBehaviour
         var machinesGo = new GameObject("Machines");
         machinesGo.transform.SetParent(transform);
         _machinesParent = machinesGo.transform;
+        var itemsGo = new GameObject("Items");
+        itemsGo.transform.SetParent(transform);
+        _itemsParent = itemsGo.transform;
     }
     public void SpawnMachineVisual(MachineInstance machine, Vector2Int pos)
     {
@@ -216,31 +224,57 @@ private Color GetColorByType(MachineType type)
         _ => Color.white
     };
 }
-    private void TryRemoveMachine(Vector2Int pos)
+private void TryRemoveMachine(Vector2Int pos)
+{
+    var cell = _grid.GetCell(pos);
+    if (cell == null || cell.IsEmpty)
     {
-        var cell = _grid.GetCell(pos);
-        if (cell == null || cell.IsEmpty)
+        Debug.Log("[GridView] Нечего удалять");
+        return;
+    }
+    var machine = cell.Machine;
+    _grid.RemoveAt(pos);
+    if (_machinesParent != null)
+    {
+        foreach (Transform child in _machinesParent)
         {
-            Debug.Log("[GridView] Нечего удалять");
-            return;
-        }
-        var machine = _grid.RemoveAt(pos);
-        if (machine == null) return;
-        if (_machinesParent != null)
-        {
-            foreach (Transform child in _machinesParent)
+            var marker = child.GetComponent<MachineVisualMarker>();
+            if (marker != null && marker.GridPosition == pos)
             {
-                var marker = child.GetComponent<MachineVisualMarker>();
-                if (marker != null && marker.GridPosition == pos)
-                {
-                    Destroy(child.gameObject);
-                    break;
-                }
+                Destroy(child.gameObject);
+                break;
             }
         }
-        float refund = machine.Config.baseCost * 0.5f;
-        _economy.AddCurrency(refund);
-        _events.RaiseMachineRemoved(pos);
-        Debug.Log($"[GridView] Машина удалена из {pos}. Возврат: {refund}");
+    }
+    float refund = machine.Config.baseCost * 0.5f;
+    _economy.AddCurrency(refund);
+    _events.RaiseMachineRemoved(pos, machine);
+    Debug.Log($"[GridView] Машина удалена из {pos}. Возврат: {refund}");
+}
+    public void SpawnItemVisual(Item item)
+    {
+        if (itemPrefab == null || _itemsParent == null) return;
+        RemoveItemVisual(item.GridPosition);
+        GameObject visual = Instantiate(itemPrefab, _itemsParent);
+        visual.name = $"Item_{item.Resource.id}_{item.GridPosition.x}_{item.GridPosition.y}";
+        Vector3 offset = new Vector3(-(_grid.Width * cellSize) / 2f + cellSize / 2f, -(_grid.Height * cellSize) / 2f + cellSize / 2f, -0.2f);
+        visual.transform.position = offset + new Vector3(item.GridPosition.x * cellSize, item.GridPosition.y * cellSize, 0f);
+        visual.transform.localScale = Vector3.one * (cellSize * 0.4f);
+        var renderer = visual.GetComponent<SpriteRenderer>();
+        if (renderer != null && item.Resource.icon != null)
+        {
+            renderer.sprite = item.Resource.icon;
+            renderer.color = Color.white;
+        }
+        _itemVisuals[item.GridPosition] = visual;
+    }
+    public void RemoveItemVisual(Vector2Int pos)
+    {
+        if (_itemVisuals.TryGetValue(pos, out var visual))
+        {
+            if (visual != null)
+                Destroy(visual);
+            _itemVisuals.Remove(pos);
+        }
     }
 }

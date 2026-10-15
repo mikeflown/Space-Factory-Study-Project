@@ -23,12 +23,14 @@ public class DispenserBehaviour : IMachineBehaviour
         _timer += deltaTime;
         if (_timer < _interval) return;
         _timer = 0f;
+        if (context.Grid.HasItem(_owner.GridPosition))
+            return;
         if (!context.Economy.TrySpend(_costPerItem))
         {
             Debug.Log("[Dispenser] Недостаточно валюты для производства");
             return;
         }
-        Debug.Log($"[Dispenser] Потратил {_costPerItem} валюты и выдал {_outputResource.displayName}");
+        Debug.Log($"[Dispenser] Потратил {_costPerItem} и выдал {_outputResource.displayName}");
         context.OnItemProduced?.Invoke(_owner, _outputResource);
     }
 }
