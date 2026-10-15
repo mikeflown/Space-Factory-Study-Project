@@ -15,4 +15,4 @@ MonoBehaviour:
   id: ManualClicker
   displayName: "\u0420\u0443\u0447\u043D\u043E\u0439 \u0441\u0442\u0430\u043D\u043E\u043A"
   currencyPerClick: 1
-  icon: {fileID: 0}
+  icon: {fileID: -9023084636014651162, guid: faa29777e1031864e8b7368edab20b58, type: 3}

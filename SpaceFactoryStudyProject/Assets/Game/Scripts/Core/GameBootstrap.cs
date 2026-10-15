@@ -1,20 +1,32 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GameBootstrap : MonoBehaviour
 {
     [Header("Configs")]
     [SerializeField] private EconomyConfig economyConfig;
+    [Header("Machine Configs")]
+    [SerializeField] private MachineConfig[] allMachineConfigs;
     [Header("UI")]
     [SerializeField] private EconomyUI economyUI;
+    [SerializeField] private BuildMenuUI buildMenuUI;
     [Header("Clicker")]
     [SerializeField] private ManualClicker manualClickerPrefab;
+    [Header("Grid")]
+    [SerializeField] private int gridWidth = 12;
+    [SerializeField] private int gridHeight = 8;
+    [Header("Grid View")]
+    [SerializeField] private GridView gridView;
     private SaveSystem _saveSystem;
     private SaveData _currentSave;
     private EconomySystem _economy;
+    private GameEvents _events;
+    private GridSystem _grid;
     private void Awake()
     {
         _saveSystem = new SaveSystem();
+        _events = new GameEvents();
         _economy = new EconomySystem(economyConfig);
         _currentSave = _saveSystem.Load();
         if (_currentSave == null)
@@ -35,6 +47,14 @@ public class GameBootstrap : MonoBehaviour
             _economy.ApplyOfflineIncome(lastExit);
             Debug.Log($"[Bootstrap] Сейв загружен. Валюта: {_economy.Currency:F1}");
         }
+        _grid = new GridSystem(gridWidth, gridHeight);
+        Debug.Log($"[Bootstrap] Сетка создана: {_grid.Width}x{_grid.Height}");
+        if (gridView != null)
+            gridView.Initialize(_grid, _events, _economy);
+        if (buildMenuUI != null && gridView != null)
+            buildMenuUI.Initialize(gridView);
+        if (_currentSave != null && _currentSave.grid != null)
+            RestoreGrid(_currentSave.grid);
         if (economyUI != null)
             economyUI.Initialize(_economy);
         if (manualClickerPrefab != null)
@@ -49,10 +69,64 @@ public class GameBootstrap : MonoBehaviour
     }
     private void OnApplicationQuit()
     {
+        SaveGame();
+    }
+    private void SaveGame()
+    {
         if (_currentSave == null || _economy == null) return;
         _currentSave.currency = _economy.Currency;
         _currentSave.lastIncomePerMinute = _economy.IncomePerMinute;
+        _currentSave.grid = CollectGridSave();
         _saveSystem.Save(_currentSave);
+        Debug.Log($"[Bootstrap] Игра сохранена. Машин на сетке: {_currentSave.grid.Count}");
+    }
+    private List<GridCellSave> CollectGridSave()
+    {
+        var list = new List<GridCellSave>();
+        if (_grid == null) return list;
+        foreach (var machine in _grid.GetAllMachines())
+        {
+            list.Add(new GridCellSave
+            {
+                x = machine.GridPosition.x,
+                y = machine.GridPosition.y,
+                machineId = machine.Config.id,
+                recipeId = machine.SelectedRecipeId
+            });
+        }
+        return list;
+    }
+    private void RestoreGrid(List<GridCellSave> savedCells)
+    {
+        if (savedCells == null || savedCells.Count == 0) return;
+        if (gridView == null) return;
+        foreach (var cellSave in savedCells)
+        {
+            MachineConfig config = null;
+            foreach (var cfg in allMachineConfigs)
+            {
+                if (cfg != null && cfg.id == cellSave.machineId)
+                {
+                    config = cfg;
+                    break;
+                }
+            }
+            if (config == null)
+            {
+                Debug.LogWarning($"[Bootstrap] Не найден MachineConfig с id: {cellSave.machineId}");
+                continue;
+            }
+            Vector2Int pos = new Vector2Int(cellSave.x, cellSave.y);
+            var machineInstance = new MachineInstance(config);
+            machineInstance.SelectedRecipeId = cellSave.recipeId;
+            if (!_grid.TryPlace(pos, machineInstance))
+            {
+                Debug.LogWarning($"[Bootstrap] Не удалось восстановить машину в {pos}");
+                continue;
+            }
+            gridView.SpawnMachineVisual(machineInstance, pos);
+        }
+        Debug.Log($"[Bootstrap] Восстановлено машин: {savedCells.Count}");
     }
     [ContextMenu("Delete Save")]
     private void DeleteSaveFromContext()
@@ -66,5 +140,10 @@ public class GameBootstrap : MonoBehaviour
     private void AddTestCurrency()
     {
         _economy?.AddCurrency(100f);
+    }
+    [ContextMenu("Save Game Now")]
+    private void SaveGameFromContext()
+    {
+        SaveGame();
     }
 }
