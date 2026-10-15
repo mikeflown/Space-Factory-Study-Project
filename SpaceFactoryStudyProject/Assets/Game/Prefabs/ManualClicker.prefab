@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6039895000632119338}
   - component: {fileID: 5526568941876858996}
   - component: {fileID: 3239001931922832940}
+  - component: {fileID: 4273893915007998387}
   m_Layer: 0
   m_Name: ManualClicker
   m_TagString: Untagged
@@ -138,3 +139,16 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.16, y: 0.16}
   m_EdgeRadius: 0
+--- !u!114 &4273893915007998387
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7131160339498888982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed152d2fb9948244d911d445826e5e3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ManualClicker
+  config: {fileID: 11400000, guid: 71d295404bb5d2e49ab0e71c8966060b, type: 2}
