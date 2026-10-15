@@ -268,6 +268,7 @@ GameObject:
   - component: {fileID: 758307961}
   - component: {fileID: 758307960}
   - component: {fileID: 758307959}
+  - component: {fileID: 758307963}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -360,6 +361,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &758307963
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 758307958}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2df447198b323445880b03c365c99e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EconomyUI
+  currencyText: {fileID: 635081365}
+  incomeText: {fileID: 2074253136}
 --- !u!1 &808022223
 GameObject:
   m_ObjectHideFlags: 0
@@ -488,6 +503,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4b751754d57054d41813a19ded733870, type: 2}
   - {fileID: 11400000, guid: 5a386ee057957b74a8df2f33565f37af, type: 2}
   - {fileID: 11400000, guid: b019ea0699e323e4ca4aa9050da98b54, type: 2}
+  economyUI: {fileID: 758307963}
 --- !u!1 &2074253134
 GameObject:
   m_ObjectHideFlags: 0

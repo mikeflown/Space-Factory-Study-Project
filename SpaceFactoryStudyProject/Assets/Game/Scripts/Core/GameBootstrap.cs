@@ -6,10 +6,11 @@ public class GameBootstrap : MonoBehaviour
     [Header("Configs")]
     [SerializeField] private EconomyConfig economyConfig;
     [SerializeField] private UpgradeConfig[] upgradeConfigs;
+    [Header("UI")]
+    [SerializeField] private EconomyUI economyUI;
     private SaveSystem _saveSystem;
     private SaveData _currentSave;
     private EconomySystem _economy;
-
     private void Awake()
     {
         _saveSystem = new SaveSystem();
@@ -29,15 +30,12 @@ public class GameBootstrap : MonoBehaviour
         else
         {
             _economy.Initialize(_currentSave.currency, _currentSave.lastIncomePerMinute);
-
             DateTime lastExit = new DateTime(_currentSave.lastExitTicks, DateTimeKind.Utc);
             _economy.ApplyOfflineIncome(lastExit);
             Debug.Log($"[Bootstrap] Сейв загружен. Валюта: {_economy.Currency:F1}");
         }
-        _economy.OnCurrencyChanged += currency =>
-        {
-            Debug.Log($"Валюта изменилась: {currency:F2}");
-        };
+        if (economyUI != null)
+            economyUI.Initialize(_economy);
     }
     private void Update()
     {
@@ -45,7 +43,7 @@ public class GameBootstrap : MonoBehaviour
     }
     private void OnApplicationQuit()
     {
-        if (_currentSave == null) return;
+        if (_currentSave == null || _economy == null) return;
         _currentSave.currency = _economy.Currency;
         _currentSave.lastIncomePerMinute = _economy.IncomePerMinute;
         _saveSystem.Save(_currentSave);
